@@ -4,4 +4,5 @@ module.exports = {
   AirplaneController,
   InfoController,
   CityController: require("./city-controller"),
+  AirportController: require("./airport-controller"),
 };
