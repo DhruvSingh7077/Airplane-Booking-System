@@ -1,0 +1,84 @@
+// const { StatusCodes } = require("http-status-codes");
+// const { FlightService } = require("../services");
+
+// const { SuccessResponse, ErrorResponse } = require("../utils/common");
+// async function createFlight(req, res) {
+//   try {
+//     const flight = await FlightService.createFlight({
+//       flightNumber: req.body.flightNumber,
+//       airplaneId: req.body.airplaneId,
+//       departureAirportId: req.body.departureAirportId,
+//       arrivalAirportId: req.body.arrivalAirportId,
+//       arrivalTime: req.body.arrivalTime,
+//       departureTime: req.body.departureTime,
+//       price: req.body.price,
+//       boardingGate: req.body.boardingGate,
+//       totalSeats: req.body.totalSeats,
+//     });
+//     // SuccessResponse.data = flight;
+//     return res.status(StatusCodes.CREATED).json(SuccessResponse(flight));
+//   } catch (error) {
+//     ErrorResponse.error = error;
+
+//     return res.status(error.statusCode).json(ErrorResponse(error));
+//   }
+// }
+// async function getAllFlights(req, res) {
+//   try {
+//     const flights = await FlightService.getAllFlights(req.query);
+//     // SuccessResponse.data = flights;
+//     return res.status(StatusCodes.OK).json(SuccessResponse(flights));
+//   } catch (error) {
+//     ErrorResponse.error = error;
+//     return res.status(error.statusCode).json(ErrorResponse(error));
+//   }
+// }
+// module.exports = {
+//   createFlight,
+//   getAllFlights,
+// };
+const { StatusCodes } = require("http-status-codes");
+const { FlightService } = require("../services");
+
+const { SuccessResponse, ErrorResponse } = require("../utils/common");
+
+async function createFlight(req, res) {
+  try {
+    const flight = await FlightService.createFlight({
+      flightNumber: req.body.flightNumber,
+      airplaneId: req.body.airplaneId,
+      departureAirportId: req.body.departureAirportId,
+      arrivalAirportId: req.body.arrivalAirportId,
+      arrivalTime: req.body.arrivalTime,
+      departureTime: req.body.departureTime,
+      price: req.body.price,
+      boardingGate: req.body.boardingGate,
+      totalSeats: req.body.totalSeats,
+    });
+
+    return res.status(StatusCodes.CREATED).json(SuccessResponse(flight));
+  } catch (error) {
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse(error));
+  }
+}
+
+async function getAllFlights(req, res) {
+  try {
+    const flights = await FlightService.getAllFlights(req.query);
+    console.log("SuccessResponse TYPE:", typeof SuccessResponse);
+    console.log("SuccessResponse SOURCE:", SuccessResponse.toString());
+
+    return res.status(StatusCodes.OK).json(SuccessResponse(flights));
+  } catch (error) {
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse(error));
+  }
+}
+
+module.exports = {
+  createFlight,
+  getAllFlights,
+};
