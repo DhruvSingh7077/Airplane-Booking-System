@@ -77,8 +77,23 @@ async function getAllFlights(req, res) {
       .json(ErrorResponse(error));
   }
 }
+// POST : /flights/:id
+//req-body {}
+async function getFlight(req, res) {
+  try {
+    const flight = await FlightService.getFlight(req.params.id);
+      console.log("FLIGHT VALUE:", flight);
+    console.log("TYPE:", typeof flight);
+    // SuccessResponse.data = flight;
+    return res.status(StatusCodes.OK).json(SuccessResponse(flight));
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
+}
 
 module.exports = {
   createFlight,
   getAllFlights,
+  getFlight
 };
