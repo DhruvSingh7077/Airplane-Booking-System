@@ -1,4 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
+const AppError = require("../utils/errors/app-error");
 const { FlightRepository } = require("../repositories");
 const { Op } = require("sequelize");
 const flightRepository = new FlightRepository();
@@ -83,8 +84,20 @@ async function getFlight(id) {
       );
     }
 }
+async function updateSeats(data) {
+  try{
+    const response = await flightRepository.updateRemainingSeats(data.flightId,data.seats,data.dec)
+    return response;
+  } catch(error){
+ throw new AppError(
+        "cannot update data of the flight ",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+  }
+}
 module.exports = {
   createFlight,
   getAllFlights,
-  getFlight
+  getFlight,
+  updateSeats
 };
